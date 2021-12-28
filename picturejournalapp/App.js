@@ -28,6 +28,8 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import Geolocation from './src/app/utils/geolocation';
+
 var ImagePicker = require('react-native-image-picker');
 
 const Section = ({children, title}) => {
@@ -120,10 +122,11 @@ const App = () => {
             screen and then come back to see your edits.
             <Button
               onPress={openCamera}
-              title="Learn More"
+              title="Location"
               color="#841584"
               accessibilityLabel="Learn more about this purple button"
             />
+            <Geolocation enable={true} />
           </Section>
           <Section title="See Your Changes">
             <ReloadInstructions />
