@@ -1,11 +1,22 @@
 import React from 'react';
-import {Icon} from 'react-native-elements';
+import Icon from 'react-native-remix-icon';
 
-const icons = {
-  HomeScreen: 'home',
-  Summary: 'info'
+const iconsFocused = {
+  HomeScreen: 'home-fill',
+  Summary: 'information-fill'
 }
 
-const ScreenOptionsIcon = props => <Icon name={icons[props.routeName]} type="feather" size={24} color={props.color} />;
+const icons = {
+  HomeScreen: 'home-line',
+  Summary: 'information-line'
+}
+
+const getIconName = ({routeName, focused}) => {
+  debugger;
+  console.log('getIconName', focused, routeName);
+  return focused ? iconsFocused[routeName] : icons[routeName];
+};
+
+const ScreenOptionsIcon = props => <Icon name={getIconName(props)} size={24} color='#6c6c6c' />;
 
 export default ScreenOptionsIcon;

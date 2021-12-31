@@ -2,7 +2,6 @@ import { TouchableOpacity, View, StyleSheet} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import {Icon} from 'react-native-elements';
 import 'react-native-gesture-handler';
 import React from 'react';
 
@@ -16,6 +15,7 @@ import CustomTitle from '../components/customTitle';
 import PhotoView from '../screens/PhotoView/PhotoView';
 import ScreenOptionsIcon from '../components/screenOptionsIcon';
 import CustomTabBarButton from '../components/customTabBarButton';
+import Icon from 'react-native-remix-icon';
 
 const Stack = createNativeStackNavigator();
 const StackPhotoView = createNativeStackNavigator();
@@ -26,7 +26,6 @@ const options = {
   tabBarActiveTintColor: '#2D3038',
   tabBarStyle: {
     height: '8%',
-    backgroundColor: 'lightgray',
   },
   tabBarShowLabel: false,
 };
@@ -69,8 +68,8 @@ const Home = () => {
       initialRouteName={screens.HomeScreen}
       screenOptions={({route}) => ({
         ...options,
-        tabBarIcon: ({color}) => (
-          <ScreenOptionsIcon routeName={route.name} color={color} />
+        tabBarIcon: ({color, focused}) => (
+          <ScreenOptionsIcon focused={focused} routeName={route.name} />
         ),
         headerTitleAlign: 'center',
         headerStyle: {height: 80},
@@ -89,7 +88,7 @@ const Home = () => {
           tabBarIcon: ({focused, color}) => (
             <View>
               <TouchableOpacity onPress={OpenCamera} style={styles.roundButton}>
-                <Icon name="plus" type="feather" size={24} color="#00e3ba" />
+                <Icon name="add-line" size={24} color="#00e3ba" />
               </TouchableOpacity>
             </View>
           ),
