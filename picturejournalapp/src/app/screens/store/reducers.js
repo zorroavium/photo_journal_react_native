@@ -1,35 +1,29 @@
 import {
-  GET_BOOKS,
-  ADD_TO_BOOKMARK_LIST,
-  REMOVE_FROM_BOOKMARK_LIST,
   GET_LOCATION,
+  SAVE_LOCATION,
+  GET_TEMPERATURE,
 } from './actions';
 
 const initialState = {
-  books: [],
-  bookmarks: [],
   location: [],
+  locationDetails: [],
+  temperature: [],
 };
 
-function booksReducer(state = initialState, action) {
+function resourceReducer(state = initialState, action) {
   switch (action.type) {
-    case GET_BOOKS:
-      return {...state, books: action.payload};
     case GET_LOCATION:
       console.log(action.payload);
       return {...state, location: action.payload};
-    case ADD_TO_BOOKMARK_LIST:
-      return {...state, bookmarks: [...state.bookmarks, action.payload]};
-    case REMOVE_FROM_BOOKMARK_LIST:
-      return {
-        ...state,
-        bookmarks: state.bookmarks.filter(
-          book => book.id !== action.payload.id,
-        ),
-      };
+    case GET_TEMPERATURE:
+      console.log('GET_TEMPERATURE', action.payload);
+      return {...state, temperature: action.payload};
+    case SAVE_LOCATION:
+      console.log('SAVE_LOCATION', action.payload);
+      return {...state, location: action.payload};
     default:
       return state;
   }
 }
 
-export default booksReducer;
+export default resourceReducer;

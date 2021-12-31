@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {persistStore, persistReducer} from 'redux-persist';
 
-import booksReducer from '../screens/store/reducers';
+import resourceReducer from '../screens/store/reducers';
 
 const persistConfig = {
   key: 'root',
@@ -12,7 +12,7 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-  booksReducer: persistReducer(persistConfig, booksReducer),
+  resourceReducer: persistReducer(persistConfig, resourceReducer),
 });
 
 export const store = createStore(rootReducer, applyMiddleware(thunk));

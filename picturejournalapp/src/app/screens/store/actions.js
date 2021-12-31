@@ -1,21 +1,23 @@
 import axios from 'axios';
 
-import {BASE_URL, BASE_URL_LOCATION} from '../../config';
+import {BASE_URL, BASE_URL_LOCATION, BASE_WEATHER_URL} from '../../config';
 
 // Define action types
-export const GET_BOOKS = 'GET_BOOKS';
-export const GET_LOCATION = 'GET_Location';
-export const ADD_TO_BOOKMARK_LIST = 'ADD_TO_BOOKMARK_LIST';
-export const REMOVE_FROM_BOOKMARK_LIST = 'REMOVE_FROM_BOOKMARK_LIST';
+export const SAVE_LOCATION = 'SAVE_LOCATION';
+export const GET_LOCATION_DETAILS = 'GET_LOCATION_DETAILS';
+export const GET_TEMPERATURE = 'GET_TEMPERATURE';
 
 // [asynchronous action]
-export const getBooks = () => {
+export const getLocationDetails = location => {
   try {
     return async dispatch => {
-      const response = await axios.get(`${BASE_URL}`);
+      const response = await axios.get(
+        `${BASE_URL_LOCATION(location?.latitude, location?.longitude)}`,
+      );
+      console.log('getLocationDetails', response?.data);
       if (response.data) {
         dispatch({
-          type: GET_BOOKS,
+          type: GET_LOCATION_DETAILS,
           payload: response.data,
         });
       } else {
@@ -29,13 +31,16 @@ export const getBooks = () => {
 };
 
 // [asynchronous action]
-export const getLocation = () => {
+export const getTemperature = location => {
   try {
     return async dispatch => {
-      const response = await axios.get(`${BASE_URL_LOCATION('1', '2')}`);
+      const response = await axios.get(
+        `${BASE_WEATHER_URL(location?.latitude, location?.longitude)}`,
+      );
+      console.log('getTemperature', response?.data);
       if (response.data) {
         dispatch({
-          type: GET_LOCATION,
+          type: GET_TEMPERATURE,
           payload: response.data,
         });
       } else {
@@ -49,16 +54,9 @@ export const getLocation = () => {
 };
 
 // [synchronous action]
-export const addBookmark = book => dispatch => {
+export const saveLocation = location => dispatch => {
   dispatch({
-    type: ADD_TO_BOOKMARK_LIST,
-    payload: book,
-  });
-};
-
-export const removeBookmark = book => dispatch => {
-  dispatch({
-    type: REMOVE_FROM_BOOKMARK_LIST,
-    payload: book,
+    type: SAVE_LOCATION,
+    payload: location,
   });
 };
