@@ -1,6 +1,5 @@
 import React from 'react';
 import CustomTitle from '../components/customTitle';
-import {View, Text, StyleSheet} from 'react-native';
 
 class Splash extends React.Component {
   constructor(props) {
@@ -10,12 +9,12 @@ class Splash extends React.Component {
   componentDidMount() {
     setTimeout(() => {
       this.navigate();
-    }, 250);
+    }, 400);
   }
 
   navigate = async () => {
     try {
-      this.props.navigation.replace('HomeTabNavigator');
+      this.props.navigation.navigate('Home');
     } catch (error) {
       // Error retrieving data
     }
