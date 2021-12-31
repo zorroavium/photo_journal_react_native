@@ -1,17 +1,36 @@
-import {Component} from 'react';
+import {useDispatch} from 'react-redux';
+import {useEffect, useState} from 'react';
 import {Platform, PermissionsAndroid} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 
-class GeoLocation extends Component {
-  state = {
-    initialPosition: 'unknown',
-    lastPosition: 'unknown',
-  };
+import {
+  saveLocation,
+  getLocationDetails,
+  getTemperature,
+} from '../screens/store/actions';
 
-  async componentDidMount() {
-    if (this.props.enable) {
+const GeoLocation = props => {
+  const [initialPosition, setInitialPosition] = useState('');
+  const [lastPosition, setLastPosition] = useState('');
+  const [watchID, setWatchID] = useState(null);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (watchID) {
+      Geolocation.clearWatch(watchID);
+    }
+    getLocationFromUserDevice();
+  }, []);
+
+  const saveUserLocation = location => dispatch(saveLocation(location));
+  const getLocationDetailsUsingCoordinates = location => dispatch(getLocationDetails(location));
+  const getTemperatureInfo = location => dispatch(getTemperature(location));
+
+  const getLocationFromUserDevice = async () => {
+    if (props.enable) {
       if (Platform.OS === 'ios') {
-        this.getlocation();
+        getlocation();
       }
       if (Platform.OS === 'android') {
         try {
@@ -23,7 +42,7 @@ class GeoLocation extends Component {
             granted === PermissionsAndroid.RESULTS.GRANTED ||
             granted === true
           ) {
-            this.getlocation();
+            getlocation();
           } else {
             console.log('location: permission denied');
           }
@@ -32,38 +51,34 @@ class GeoLocation extends Component {
         }
       }
     }
-  }
+  };
 
-  getlocation = () => {
+  const getlocation = () => {
     Geolocation.getCurrentPosition(
       position => {
         console.log('location: the position is ', position);
-        const initialPosition = JSON.stringify(position);
-        this.setState({initialPosition});
+        setInitialPosition({position});
+        saveUserLocation(position.coords);
+        getLocationDetailsUsingCoordinates(position.coords);
+        getTemperatureInfo(position.coords);
       },
       error => console.log('location: the error is ', error, error.message),
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
     );
 
-    this.watchID = Geolocation.watchPosition(
-      position => console.log('location: updated position is ', position),
-      error => console.log('location: the error is ', error, error.message),
-      {
-        enableHighAccuracy: true,
-        distanceFilter: 500,
-        useSignificantChanges: true,
-      },
+    setWatchID(
+      Geolocation.watchPosition(
+        position => console.log('location: updated position is ', position),
+        error => console.log('location: the error is ', error, error.message),
+        {
+          enableHighAccuracy: true,
+          distanceFilter: 500,
+          useSignificantChanges: true,
+        },
+      ),
     );
   };
 
-  componentWillUnmount = () => {
-    if (this.props.enable) {
-      Geolocation.clearWatch(this.watchID);
-    }
-  };
-
-  render() {
-    return null;
-  }
-}
+  return null;
+};
 export default GeoLocation;
