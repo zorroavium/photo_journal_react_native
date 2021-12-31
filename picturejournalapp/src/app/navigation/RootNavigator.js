@@ -1,40 +1,25 @@
-import React from 'react';
-import {
-  TouchableOpacity,
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  PermissionsAndroid,
-} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import { TouchableOpacity, View, StyleSheet} from 'react-native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {NavigationContainer} from '@react-navigation/native';
 import {Icon} from 'react-native-elements';
+import 'react-native-gesture-handler';
+import React from 'react';
 
-// Import screens
-import Home from '../screens/Home/Home';
+import Splash from '../global/splash';
+import HomeScreen from '../screens/Home/Home';
 import DayView from '../screens/DayView/DayView';
 import Summary from '../screens/Summary/Summary';
-import PhotoView from '../screens/PhotoView/PhotoView';
-
-// Import mock screens
-import BooksList from '../screens/BooksList';
-import BookmarksList from '../screens/BookmarksList';
-
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Splash from '../global/splash';
+import OpenCamera from '../components/openCamera';
+import screens from '../constants/screenConstants';
 import CustomTitle from '../components/customTitle';
-var ImagePicker = require('react-native-image-picker');
+import PhotoView from '../screens/PhotoView/PhotoView';
+import ScreenOptionsIcon from '../components/screenOptionsIcon';
+import CustomTabBarButton from '../components/customTabBarButton';
 
 const Stack = createNativeStackNavigator();
+const StackPhotoView = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
-export const screens = {
-  Splash: 'Splash',
-  Home: 'HomeTabNavigator',
-  BooksList: 'BooksList',
-  Summary: 'Summary',
-};
 
 const options = {
   tabBarInactiveTintColor: '#FFFFFF',
@@ -46,82 +31,19 @@ const options = {
   tabBarShowLabel: false,
 };
 
-const CustomTabBarButton = ({children, onPress}) => (
-  <TouchableOpacity
-    style={{
-      top: -30,
-      justifyContent: 'center',
-      alignItems: 'center',
-    }}>
-    <View
-      style={{
-        width: 70,
-        height: 70,
-      }}>
-      {children}
-    </View>
-  </TouchableOpacity>
-);
-
-const screenOptionsIcon = (route, color) => {
-  let iconName;
-
-  switch (route.name) {
-    case screens.BooksList:
-      iconName = 'home';
-      break;
-    case screens.Summary:
-      iconName = 'info';
-      break;
-    default:
-      break;
-  }
-
-  return <Icon name={iconName} type="feather" size={24} color={color} />;
+const photoStack = () => {
+  return (
+    <StackPhotoView.Navigator>
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="PhotoViewNested"
+        component={PhotoView}
+      />
+    </StackPhotoView.Navigator>
+  );
 };
 
-const openCamera = async () => {
-  const grantedcamera = await PermissionsAndroid.request(
-    PermissionsAndroid.PERMISSIONS.CAMERA,
-    {
-      title: 'App Camera Permission',
-      message: 'App needs access to your camera ',
-      buttonNeutral: 'Ask Me Later',
-      buttonNegative: 'Cancel',
-      buttonPositive: 'OK',
-    },
-  );
-  const grantedstorage = await PermissionsAndroid.request(
-    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-    {
-      title: 'App Camera Permission',
-      message: 'App needs access to your camera ',
-      buttonNeutral: 'Ask Me Later',
-      buttonNegative: 'Cancel',
-      buttonPositive: 'OK',
-    },
-  );
-  if (
-    grantedcamera === PermissionsAndroid.RESULTS.GRANTED &&
-    grantedstorage === PermissionsAndroid.RESULTS.GRANTED
-  ) {
-    console.log('Camera & storage permission given');
-
-    const {height, width} = Dimensions.get('window');
-    const options = {
-      quality: 0.9,
-      mediaType: 'photo',
-      saveToPhotos: true, //to store captured photo via camera to photos or else it will be stored in temp folders and will get deleted on temp clear
-      includeBase64: false,
-    };
-    const result = await ImagePicker.launchCamera(options);
-    console.log('openCamera!!', ImagePicker, result);
-  } else {
-    console.log('Camera permission denied');
-  }
-};
-
-const ScreenStack = () => {
+const ScreenStack = ({route}) => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={screens.Splash}>
@@ -131,39 +53,42 @@ const ScreenStack = () => {
           component={Splash}
         />
         <Stack.Screen
-          options={{headerShown: false}}
           name={screens.Home}
-          component={HomeTabNavigator}
+          options={{headerShown: false}}
+          component={Home}
         />
+        <Stack.Screen name="photoStack" component={photoStack}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
-const HomeTabNavigator = () => {
+const Home = () => {
   return (
     <Tab.Navigator
-      initialRouteName={screens.BooksList}
+      initialRouteName={screens.HomeScreen}
       screenOptions={({route}) => ({
         ...options,
-        tabBarIcon: ({color}) => screenOptionsIcon(route, color),
+        tabBarIcon: ({color}) => (
+          <ScreenOptionsIcon routeName={route.name} color={color} />
+        ),
         headerTitleAlign: 'center',
         headerStyle: {height: 80},
       })}>
       <Tab.Screen
-        name={screens.BooksList}
-        component={BooksList}
+        name={screens.HomeScreen}
+        component={HomeScreen}
         options={{
           headerTitle: () => <CustomTitle text1="pic" text2="a" text3="day" />,
         }}
       />
       <Tab.Screen
-        name="PhotoView"
-        component={PhotoView}
+        name="Day View"
+        component={DayView}
         options={{
           tabBarIcon: ({focused, color}) => (
             <View>
-              <TouchableOpacity onPress={openCamera} style={styles.roundButton}>
+              <TouchableOpacity onPress={OpenCamera} style={styles.roundButton}>
                 <Icon name="plus" type="feather" size={24} color="#00e3ba" />
               </TouchableOpacity>
             </View>
