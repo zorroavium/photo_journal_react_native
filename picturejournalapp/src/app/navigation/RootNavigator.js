@@ -2,6 +2,7 @@ import { TouchableOpacity, View, StyleSheet} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
+import Icon from 'react-native-remix-icon';
 import 'react-native-gesture-handler';
 import React from 'react';
 
@@ -15,7 +16,6 @@ import CustomTitle from '../components/customTitle';
 import PhotoView from '../screens/PhotoView/PhotoView';
 import ScreenOptionsIcon from '../components/screenOptionsIcon';
 import CustomTabBarButton from '../components/customTabBarButton';
-import Icon from 'react-native-remix-icon';
 
 const Stack = createNativeStackNavigator();
 const StackPhotoView = createNativeStackNavigator();

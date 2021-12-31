@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, FlatList} from 'react-native';
-import {Icon} from 'react-native-elements';
+import Icon from 'react-native-remix-icon';
 import React from 'react';
 
 const data = [
@@ -34,8 +34,8 @@ const data = [
 ];
 
 const icons = {
-  temperatureIcon: 'wb-sunny',
-  locationIcon: 'location-pin'
+  temperatureIcon: 'sun-line',
+  locationIcon: 'map-pin-3-line'
 }
 
 const getDayName = day => new Date(day).toString().split(' ')[1];
