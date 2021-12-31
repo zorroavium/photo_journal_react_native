@@ -1,13 +1,25 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Button} from 'react-native';
 
-export default function PhotoView() {
+const PhotoView = ({route, navigation}) => {
+  debugger;
+  console.log('PhotoView', route);
+  // const item = route.params.itemData;
+  // navigation.setOptions({tabBarVisible: false});
+  // console.log('itemData', item);
+
   return (
     <View style={styles.container}>
-      <Text>Photo View</Text>
+      <Text>Home Screen</Text>
+      <Button
+        title="Go to details"
+        onPress={() => navigation.navigate('Home')}
+      />
     </View>
   );
-}
+};
+
+export default PhotoView;
 
 const styles = StyleSheet.create({
   container: {
