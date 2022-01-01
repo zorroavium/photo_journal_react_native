@@ -12,8 +12,6 @@ const icons = {
 }
 
 const getIconName = ({routeName, focused}) => {
-  debugger;
-  console.log('getIconName', focused, routeName);
   return focused ? iconsFocused[routeName] : icons[routeName];
 };
 
