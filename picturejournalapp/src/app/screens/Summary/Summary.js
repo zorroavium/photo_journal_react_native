@@ -6,7 +6,6 @@ import Geolocation from '../../utils/geolocation';
 export default function Summary() {
   return (
     <View style={styles.container}>
-      <Geolocation enable={true} />
       <Text>Summary</Text>
     </View>
   );

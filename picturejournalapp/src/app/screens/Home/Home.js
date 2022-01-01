@@ -2,6 +2,8 @@ import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, FlatList} fr
 import Icon from 'react-native-remix-icon';
 import React from 'react';
 
+import Geolocation from '../../utils/geolocation';
+
 const data = [
   {
     id: '1',
@@ -9,6 +11,7 @@ const data = [
     location: 'Pune, India',
     temperature: '15',
     image: require('../../assets/banners/food-banner1.jpg'),
+    thoughts: 'Some random test thoughts for the application.'
   },
   {
     id: '2',
@@ -16,6 +19,7 @@ const data = [
     location: 'Ranchi, India',
     temperature: '16',
     image: require('../../assets/banners/food-banner2.jpg'),
+    thoughts: 'Some random test thoughts for the application.'
   },
   {
     id: '3',
@@ -23,6 +27,7 @@ const data = [
     location: 'Bhubaneshwar, India',
     temperature: '17',
     image: require('../../assets/banners/food-banner3.jpg'),
+    thoughts: 'Some random test thoughts for the application.'
   },
   {
     id: '4',
@@ -30,6 +35,7 @@ const data = [
     location: 'Delhi, India',
     temperature: '18',
     image: require('../../assets/banners/food-banner4.jpg'),
+    thoughts: 'Some random test thoughts for the application.'
   },
 ];
 
@@ -45,16 +51,16 @@ const Home = ({navigation, route}) => {
 
   return (
     <View style={styles.cardsWrapper}>
+      
+      <Geolocation enable={true} />
+      
       <FlatList
         data={data}
         keyExtractor={(item, index) => item.id}
         renderItem={({item}) => (
           <TouchableOpacity
             style={styles.categoryBtn}
-            onPress={() => navigation.navigate('photoStack', {
-              screen: 'PhotoView',
-              params: { itemData: item },
-            })}>
+            onPress={() => navigation.navigate('PhotoView', { itemData: item })}>
 
             <ImageBackground source={item.image} resizeMode="cover" style={styles.image}>
               <View>
@@ -85,6 +91,7 @@ const Home = ({navigation, route}) => {
           </TouchableOpacity>
         )}
       />
+
     </View>
   );
 };
