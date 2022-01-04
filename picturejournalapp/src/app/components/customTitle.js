@@ -9,12 +9,7 @@ class CustomTitle extends React.Component {
   render() {
     return (
       <View
-        style={{
-          backgroundColor: '#fff',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flex: 1,
-        }}>
+        style={this.props.hasNavigationArrow ? styles.containerWithoutFlex : styles.container}>
         <Text style={styles.label}>
           {this.props.text1 && (
             <Text style={styles.titleText1}>{this.props.text1}</Text>
@@ -34,6 +29,23 @@ class CustomTitle extends React.Component {
 export default CustomTitle;
 
 const styles = StyleSheet.create({
+
+  containerWithoutFlex: {
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 80
+  },
+  container: {
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    height: 80
+  },
+  label: {
+    
+  },
   titleText1: {
     fontSize: 30,
     color: '#6c6c6c',
