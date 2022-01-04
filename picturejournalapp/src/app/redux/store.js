@@ -8,7 +8,7 @@ import resourceReducer from '../screens/store/reducers';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['bookmarks'],
+  whitelist: ['userInfoHistory', 'imageUriMap', 'firstEntry', 'lastEntry', 'dataMap'],
 };
 
 const rootReducer = combineReducers({

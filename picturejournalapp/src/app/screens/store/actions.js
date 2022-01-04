@@ -3,9 +3,12 @@ import axios from 'axios';
 import {BASE_URL, BASE_URL_LOCATION, BASE_WEATHER_URL} from '../../config';
 
 // Define action types
-export const SAVE_LOCATION = 'SAVE_LOCATION';
-export const GET_LOCATION_DETAILS = 'GET_LOCATION_DETAILS';
-export const GET_TEMPERATURE = 'GET_TEMPERATURE';
+export const SAVE_COORDINATES = 'SAVE_COORDINATES';
+export const SAVE_LOCATION_DETAILS = 'SAVE_LOCATION_DETAILS';
+export const SAVE_TEMPERATURE = 'SAVE_TEMPERATURE';
+export const SAVE_IMAGE_PATH = 'SAVE_IMAGE_PATH';
+export const REMOVE_IMAGE = 'REMOVE_IMAGE';
+export const UPDATE_THOUGHT = 'UPDATE_THOUGHT';
 
 // [asynchronous action]
 export const getLocationDetails = location => {
@@ -14,10 +17,10 @@ export const getLocationDetails = location => {
       const response = await axios.get(
         `${BASE_URL_LOCATION(location?.latitude, location?.longitude)}`,
       );
-      console.log('getLocationDetails', response?.data);
+      console.log('getLocationDetails response received', response?.data);
       if (response.data) {
         dispatch({
-          type: GET_LOCATION_DETAILS,
+          type: SAVE_LOCATION_DETAILS,
           payload: response.data,
         });
       } else {
@@ -40,7 +43,7 @@ export const getTemperature = location => {
       console.log('getTemperature', response?.data);
       if (response.data) {
         dispatch({
-          type: GET_TEMPERATURE,
+          type: SAVE_TEMPERATURE,
           payload: response.data,
         });
       } else {
@@ -54,9 +57,30 @@ export const getTemperature = location => {
 };
 
 // [synchronous action]
-export const saveLocation = location => dispatch => {
+export const saveCoordinates = location => dispatch => {
   dispatch({
-    type: SAVE_LOCATION,
+    type: SAVE_COORDINATES,
     payload: location,
+  });
+};
+
+export const saveImagePath = path => dispatch => {
+  dispatch({
+    type: SAVE_IMAGE_PATH,
+    payload: path,
+  });
+};
+
+export const removeImage = key => dispatch => {
+  dispatch({
+    type: REMOVE_IMAGE,
+    payload: key,
+  });
+};
+
+export const updatethought = key => dispatch => {
+  dispatch({
+    type: UPDATE_THOUGHT,
+    payload: key,
   });
 };
