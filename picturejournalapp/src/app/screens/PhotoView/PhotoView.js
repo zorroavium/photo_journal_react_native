@@ -1,20 +1,19 @@
+import {
+  View,
+  StyleSheet,
+  ImageBackground,
+} from 'react-native';
 import React from 'react';
-import {StyleSheet, Text, View, Button} from 'react-native';
 
-const PhotoView = ({route, navigation}) => {
-  debugger;
-  console.log('PhotoView', route);
-  // const item = route.params.itemData;
-  // navigation.setOptions({tabBarVisible: false});
-  // console.log('itemData', item);
+const PhotoView = ({route}) => {
+  const item = route.params.itemData;
 
   return (
-    <View style={styles.container}>
-      <Text>Home Screen</Text>
-      <Button
-        title="Go to details"
-        onPress={() => navigation.navigate('Home')}
-      />
+    <View style={styles.cardImgWrapper}>
+      <ImageBackground
+        source={{uri: `file://${item?.image}`}}
+        resizeMode="cover"
+        style={styles.image}></ImageBackground>
     </View>
   );
 };
@@ -22,10 +21,11 @@ const PhotoView = ({route, navigation}) => {
 export default PhotoView;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f8f8f8',
-    alignItems: 'center',
+  cardImgWrapper: {
     justifyContent: 'center',
+    flex: 1,
   },
+  image: {
+    height: 250,
+  }
 });
