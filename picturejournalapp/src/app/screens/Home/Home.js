@@ -1,68 +1,45 @@
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, FlatList} from 'react-native';
+import React, { useState, useEffect} from 'react';
 import Icon from 'react-native-remix-icon';
-import React from 'react';
+import {useSelector} from 'react-redux';
 
 import Geolocation from '../../utils/geolocation';
-
-const data = [
-  {
-    id: '1',
-    date: '2016-01-18 10:34:23',
-    location: 'Pune, India',
-    temperature: '15',
-    image: require('../../assets/banners/food-banner1.jpg'),
-    thoughts: 'Some random test thoughts for the application.'
-  },
-  {
-    id: '2',
-    date: '2016-01-17 10:34:23',
-    location: 'Ranchi, India',
-    temperature: '16',
-    image: require('../../assets/banners/food-banner2.jpg'),
-    thoughts: 'Some random test thoughts for the application.'
-  },
-  {
-    id: '3',
-    date: '2016-01-04 10:34:23',
-    location: 'Bhubaneshwar, India',
-    temperature: '17',
-    image: require('../../assets/banners/food-banner3.jpg'),
-    thoughts: 'Some random test thoughts for the application.'
-  },
-  {
-    id: '4',
-    date: '2016-01-04 10:34:23',
-    location: 'Delhi, India',
-    temperature: '18',
-    image: require('../../assets/banners/food-banner4.jpg'),
-    thoughts: 'Some random test thoughts for the application.'
-  },
-];
+import Screens from '../../constants/screenConstants';
+import {stylesGlobalCards} from '../../global/style';
 
 const icons = {
   temperatureIcon: 'sun-line',
   locationIcon: 'map-pin-3-line'
 }
 
+const iconColor = '#fff';
+
 const getDayName = day => new Date(day).toString().split(' ')[1];
 const getDate = day => new Date(day).toString().split(' ')[2];
 
-const Home = ({navigation, route}) => {
+const Home = ({navigation}) => {
+
+  const resourceReducer = useSelector(state => state.resourceReducer);
+  const [itemCollection, setItemCollection] = useState(null);
+
+  useEffect(() => {
+    setItemCollection(Object.values(resourceReducer.dataMap));
+    console.log('Object.values(resourceReducer.dataMap)', itemCollection);
+  }, [resourceReducer]);
 
   return (
     <View style={styles.cardsWrapper}>
       
       <Geolocation enable={true} />
-      
       <FlatList
-        data={data}
-        keyExtractor={(item, index) => item.id}
+        data={itemCollection}
+        keyExtractor={(item, index) => index}
         renderItem={({item}) => (
           <TouchableOpacity
             style={styles.categoryBtn}
-            onPress={() => navigation.navigate('PhotoView', { itemData: item })}>
+            onPress={() => navigation.navigate(Screens.DayView, { itemData: item })}>
 
-            <ImageBackground source={item.image} resizeMode="cover" style={styles.image}>
+            <ImageBackground source={{uri: `file://${item.image}`}} resizeMode="cover" style={styles.image}>
               <View>
                 <Text style={styles.dayName}>
                   {getDayName(item.date)}
@@ -78,12 +55,12 @@ const Home = ({navigation, route}) => {
                   style={styles.temperature}>
                   {item.temperature}&deg;
                 </Text>
-                <Icon color="#fff" name={icons.temperatureIcon} size={20} />
+                <Icon color={iconColor} name={icons.temperatureIcon} size={20} />
               </View>
 
               <View
                 style={styles.locationContainer}>
-                <Icon color="#fff" name={icons.locationIcon} size={20} />
+                <Icon color={iconColor} name={icons.locationIcon} size={20} />
                 <Text style={styles.text}>{item.location}</Text>
               </View>
             </ImageBackground>
@@ -99,56 +76,8 @@ const Home = ({navigation, route}) => {
 export default Home;
 
 const styles = StyleSheet.create({
+  ...stylesGlobalCards,
   cardImgWrapper: {
     flex: 1,
-  },
-  image: {
-    height: 180,
-  },
-  text: {
-    color: 'white',
-    fontSize: 16,
-  },
-  dayName: {
-    color: 'white',
-    paddingLeft: 12,
-    paddingBottom: 0,
-    paddingTop: 10,
-    fontSize: 20,
-  },
-  date: {
-    color: 'white',
-    paddingLeft: 10,
-    lineHeight: 35,
-    paddingTop: 0,
-    fontSize: 30,
-    fontFamily: 'Inter-Bold',
-    alignItems: 'center',
-  },
-  tempContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: 5,
-    right: 10,
-  },
-  temperature: {
-    color: 'white',
-    lineHeight: 35,
-    paddingTop: 0,
-    paddingRight: 3,
-    fontSize: 16,
-    fontFamily: 'Inter-Bold',
-    alignItems: 'center',
-  },
-  locationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: 10,
-    left: 10,
-    opacity: 0.8,
   }
 });
