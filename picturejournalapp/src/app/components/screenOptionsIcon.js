@@ -3,12 +3,12 @@ import Icon from 'react-native-remix-icon';
 
 const iconsFocused = {
   HomeScreen: 'home-fill',
-  Summary: 'information-fill'
+  InfoScreen: 'information-fill'
 }
 
 const icons = {
   HomeScreen: 'home-line',
-  Summary: 'information-line'
+  InfoScreen: 'information-line'
 }
 
 const getIconName = ({routeName, focused}) => {
