@@ -2,7 +2,11 @@
   Splash: 'Splash',
   Home: 'Home',
   HomeScreen: 'HomeScreen',
-  Summary: 'Summary',
+  Info: 'InfoScreen',
+  DayView: 'DayView',
+  CameraView: 'CameraView',
+  CameraTab: 'CameraTab',
+  PhotoView: 'PhotoView'
 };
 
 export default screens;
