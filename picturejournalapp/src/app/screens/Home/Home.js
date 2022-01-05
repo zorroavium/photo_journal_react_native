@@ -3,6 +3,7 @@ import React, { useState, useEffect} from 'react';
 import Icon from 'react-native-remix-icon';
 import {useSelector} from 'react-redux';
 
+import { IMAGE_URI } from '../../config/index';
 import Geolocation from '../../utils/geolocation';
 import Screens from '../../constants/screenConstants';
 import {stylesGlobalCards} from '../../global/style';
@@ -24,7 +25,6 @@ const Home = ({navigation}) => {
 
   useEffect(() => {
     setItemCollection(Object.values(resourceReducer.dataMap));
-    console.log('Object.values(resourceReducer.dataMap)', itemCollection);
   }, [resourceReducer]);
 
   return (
@@ -39,7 +39,7 @@ const Home = ({navigation}) => {
             style={styles.categoryBtn}
             onPress={() => navigation.navigate(Screens.DayView, { itemData: item })}>
 
-            <ImageBackground source={{uri: `file://${item.image}`}} resizeMode="cover" style={styles.image}>
+            <ImageBackground source={{uri: IMAGE_URI(item?.image)}} resizeMode="cover" style={styles.image}>
               <View>
                 <Text style={styles.dayName}>
                   {getDayName(item.date)}
