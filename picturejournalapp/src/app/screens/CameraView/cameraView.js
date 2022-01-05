@@ -1,12 +1,13 @@
-import { View, StyleSheet, Dimensions, TouchableOpacity, Text, ImageBackground, PermissionsAndroid } from 'react-native';
+import { View, StyleSheet, Dimensions, TouchableOpacity, Text, ImageBackground, PermissionsAndroid, Keyboard } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import { dirPictures } from '../../utils/dirStorage';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {RNCamera} from 'react-native-camera';
 import {Input} from 'react-native-elements';
 import Icon from 'react-native-remix-icon';
 const RNFS = require('react-native-fs');
 
+import { IMAGE_ENTRY_KEY, IMAGE_URI } from '../../config/index'
 import {stylesGlobalCards} from '../../global/style';
 import {saveImagePath, removeImage, updatethought} from '../store/actions';
 
@@ -20,10 +21,12 @@ const icons = {
 const iconColor = '#fff';
 const iconColorLens = '#00e3ba';
 
-const fileName = new Date().toLocaleDateString().replaceAll('/', '-') + '.jpg' 
+const getDayName = () => new Date().toString().split(' ')[1];
+const getDate = () => new Date().toString().split(' ')[2];
 
-const getDayName = day => new Date(day).toString().split(' ')[1];
-const getDate = day => new Date(day).toString().split(' ')[2];
+const state = {
+    text: ''
+}
 
 const moveAttachment = async (filePath, newFilepath) => {
     return new Promise((resolve, reject) => {
@@ -48,28 +51,25 @@ const CameraView = () => {
   const UpdateThought = text => dispatch(updatethought(text));
 
   const [camera, setCamera] = useState(null);
-  const [path, setPath] = useState(null);
- // const [path, setPath] = useState(resourceReducer?.imageUriMap[fileName] ? (`file://${resourceReducer?.imageUriMap[fileName]}`) : null);
   const [takingPic, setTakingPic] = useState(false);
   const [item, setItem] = useState(null);
 
   console.log('resourceReducer', resourceReducer);
 
   useEffect(() => {
-    let data = resourceReducer.dataMap[fileName];
-
-    console.log('*****CameraView*********', fileName, data);
-
+    let data = resourceReducer.dataMap[IMAGE_ENTRY_KEY];
     setItem(data);
-    if(data) {
-        setPath(data.image);    
-    }
   }, [resourceReducer]);
 
   
  const onChangeText = (text) => {
-        UpdateThought(text);
- };  
+    UpdateThought(text)
+ }; 
+ 
+ const cameraIconClicked = () => {
+   deleteImageFile(`${dirPictures}/${IMAGE_ENTRY_KEY}`);
+   RemoveImageFromStore(IMAGE_ENTRY_KEY);
+}
 
   const deleteImageFile = async filepath => {
     return new Promise((resolve, reject) => {
@@ -116,7 +116,7 @@ const saveImage = async filePath => {
     }
 
     // set new image name and filepath
-    const newFilepath = `${dirPictures}/${fileName}`;
+    const newFilepath = `${dirPictures}/${IMAGE_ENTRY_KEY}`;
     console.log('newFilepath', newFilepath);
 
     const imageMoved = await moveAttachment(filePath, newFilepath);
@@ -172,7 +172,7 @@ const saveImage = async filePath => {
           activeOpacity={0.5}
           style={styles.roundButton}
           onPress={takePicture}
-          underlayColor="rgba(255, 255, 255, 0.5)">
+          >
           <Icon name={icons.cameraLens} size={24} color={iconColorLens} />
         </TouchableOpacity>
       </RNCamera>
@@ -184,12 +184,12 @@ const saveImage = async filePath => {
       <View>
         {!!item && (
           <ImageBackground
-            source={{uri: `file://${item.image}`}}
+            source={{uri: IMAGE_URI(item?.image)}}
             resizeMode="cover"
             style={styles.preview}>
             <View>
-              <Text style={styles.dayName}>{getDayName(null)}</Text>
-              <Text style={styles.date}>{getDate(null)}</Text>
+              <Text style={styles.dayName}>{getDayName()}</Text>
+              <Text style={styles.date}>{getDate()}</Text>
             </View>
 
             <View style={styles.tempContainer}>
@@ -203,22 +203,24 @@ const saveImage = async filePath => {
             </View>
           </ImageBackground>
         )}
-        <View style={styles.cancel}>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            style={styles.roundButton}
-            onPress={() => {setPath(null); deleteImageFile(`${dirPictures}/${fileName}`); RemoveImageFromStore(fileName);}}>
-            <Icon name={icons.cameraLens} size={24} color={iconColorLens} />
-          </TouchableOpacity>
-        </View>
       </View>
     );
   };
 
   return (
-    <View style={path ? styles.containerWithoutFlex : styles.container}>
-      {path ? renderImage() : renderCamera()}
-      {path && (
+    <View style={item?.image ? styles.containerWithoutFlex : styles.container}>
+    {useMemo(() => (item?.image && <View>{renderImage()}</View>), [item?.image])}
+    {!item?.image && <View>{renderCamera()}</View>}
+      {item?.image && (<View style={styles.cancel}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={styles.roundButton}
+            onPress={cameraIconClicked}>
+            <Icon name={icons.cameraLens} size={24} color={iconColorLens} />
+          </TouchableOpacity>
+        </View>)
+      }
+      {item?.image && (
         <Input
           inputStyle={styles.inputStyle}
           inputContainerStyle={styles.inputContainerStyle}
@@ -267,6 +269,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 10,
+        marginBottom: 20,
         borderRadius: 50,
         borderWidth: 1,
         borderColor: '#eeeeee',
