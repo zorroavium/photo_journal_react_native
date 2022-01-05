@@ -1,8 +1,4 @@
-import {
-  View,
-  StyleSheet,
-  ImageBackground,
-} from 'react-native';
+import { View, StyleSheet, ImageBackground } from 'react-native';
 import React from 'react';
 
 import { IMAGE_URI } from '../../config/index'

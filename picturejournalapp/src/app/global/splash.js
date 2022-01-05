@@ -14,7 +14,7 @@ class Splash extends React.Component {
     try {
       this.props.navigation.navigate('Home');
     } catch (error) {
-      // Error retrieving data
+      console.log(error);
     }
   };
 
