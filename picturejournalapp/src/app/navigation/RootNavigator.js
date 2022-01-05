@@ -92,7 +92,22 @@ const ScreenStack = () => {
             ),
           })}
         />
-        <Stack.Screen name={Screens.CameraView} component={CameraView} />
+        <Stack.Screen
+          name={Screens.CameraView}
+          component={CameraView}
+          options={({navigation}) => ({
+            headerLeft: () => (
+              <Icon
+                containerStyle={styles.backArrowContainerStyle}
+                name={icons.backArraow.label}
+                size={24}
+                onPress={() => {
+                  navigation.goBack();
+                }}
+              />
+            ),
+          })}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
