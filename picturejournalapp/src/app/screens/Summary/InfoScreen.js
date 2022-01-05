@@ -1,3 +1,4 @@
+import { ScrollView } from 'react-native-gesture-handler';
 import {StyleSheet, Text, View} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { Divider } from 'react-native-elements';
@@ -22,15 +23,13 @@ export default function InfoScreen() {
   }
 
   const getFormattedDate = (dateString) => {
-    console.log(dateString);
     const dateArray = new Date(dateString).toString().split(' ');
-    console.log(dateArray);
     const date = `${dateArray[0] + ' ' + dateArray[1] + ' ' + dateArray[2] + ', ' + dateArray[3]}`; 
     return date;
   }
 
   const getRecordedDays = () => {
-    return Object.keys(data).length;
+    return data ? Object.keys(data).length : 0;
   }
 
   useEffect(() => {
@@ -39,25 +38,27 @@ export default function InfoScreen() {
     let coldestDay = dataMap[Object.keys(dataMap)[0]];
 
     Object.entries(resourceReducer.dataMap).forEach(([key, value], index) => {
-      console.log('*****InfoScreen*********',key , value, index);
-      if(hotestDay.temperature < value.temperature) {
-        hotestDay = {...value};
-      }
-      if(coldestDay.temperature > value.temperature) {
-        coldestDay = {...value};
+
+      if(!!value.temperature) {
+        if(hotestDay.temperature < value.temperature) {
+          hotestDay = {...value};
+        }
+        if(coldestDay.temperature > value.temperature) {
+          coldestDay = {...value};
+        }
+  
+        setHotest(hotestDay);
+        setColdest(coldestDay);
+        setData(dataMap);
+        setTotalDays(dateDiffInDays(new Date(resourceReducer?.firstEntry?.date), new Date(resourceReducer?.lastEntry?.date)) + 1);
       }
 
-      setHotest(hotestDay);
-      setColdest(coldestDay);
-      setData(dataMap);
-      setTotalDays(dateDiffInDays(new Date(resourceReducer?.firstEntry?.date), new Date(resourceReducer?.lastEntry?.date)));
     });
 
-    console.log(hotest, coldest);
   }, [resourceReducer]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.subContainer}>
         <Text style={styles.header}>Days</Text>
         <Text style={styles.value}>{getRecordedDays()}/{totalDays}</Text>
@@ -83,7 +84,7 @@ export default function InfoScreen() {
       </View>
 
       <Divider style={styles.divider} width={2} />
-    </View>
+    </ScrollView>
   );
 }
 
