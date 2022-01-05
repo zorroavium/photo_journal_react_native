@@ -1,12 +1,8 @@
+import moment from 'moment-mini';
+
 const WEATHER_API_KEY = '82f86f8855eeda9332684d7cc04d50d2';
 
-export const IMAGE_ENTRY_KEY =
-  new Date()
-    .toLocaleDateString()
-    .replaceAll('/', '-')
-    .replaceAll(',', '-')
-    .replaceAll(':', '-')
-    .replaceAll(' ', '-') + '.jpg';
+export const IMAGE_ENTRY_KEY =  `${moment().format('MM-DD-YYYY')}.jpg`;
 
  export const IMAGE_URI = (image) => `file://${image + '?random=' + new Date()}`;
 
