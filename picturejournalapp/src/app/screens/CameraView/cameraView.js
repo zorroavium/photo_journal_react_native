@@ -255,8 +255,7 @@ const styles = StyleSheet.create({
     containerWithoutFlex: {
     },
     preview: {
-      height: 250,
-      width: Dimensions.get('window').width, backgroundColor: '#fff'
+      height: 250
     },
     cancel: {
         flex:1,
