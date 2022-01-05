@@ -5,13 +5,15 @@ import {
 } from 'react-native';
 import React from 'react';
 
+import { IMAGE_URI } from '../../config/index'
+
 const PhotoView = ({route}) => {
   const item = route.params.itemData;
 
   return (
     <View style={styles.cardImgWrapper}>
       <ImageBackground
-        source={{uri: `file://${item?.image}`}}
+        source={{uri: IMAGE_URI(item?.image)}}
         resizeMode="cover"
         style={styles.image}></ImageBackground>
     </View>
