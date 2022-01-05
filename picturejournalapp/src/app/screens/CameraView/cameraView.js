@@ -24,10 +24,6 @@ const iconColorLens = '#00e3ba';
 const getDayName = () => new Date().toString().split(' ')[1];
 const getDate = () => new Date().toString().split(' ')[2];
 
-const state = {
-    text: ''
-}
-
 const moveAttachment = async (filePath, newFilepath) => {
     return new Promise((resolve, reject) => {
         RNFS.mkdir(dirPictures)
@@ -117,7 +113,6 @@ const saveImage = async filePath => {
 
     // set new image name and filepath
     const newFilepath = `${dirPictures}/${IMAGE_ENTRY_KEY}`;
-    console.log('newFilepath', newFilepath);
 
     const imageMoved = await moveAttachment(filePath, newFilepath);
 
@@ -142,7 +137,6 @@ const saveImage = async filePath => {
 
       try {
         const data = await camera.takePictureAsync(options);
-        console.log('takePicture data', data);
         saveImage(data.uri);
       } catch (err) {
         console.log('Error', 'Failed to take picture: ' + (err.message || err));
