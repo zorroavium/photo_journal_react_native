@@ -3,6 +3,7 @@ import React, { useState, useEffect} from 'react';
 import {Input} from 'react-native-elements';
 import Icon from 'react-native-remix-icon';
 
+import { IMAGE_URI } from '../../config/index'
 import {stylesGlobalCards} from '../../global/style';
 import Screens from '../../constants/screenConstants';
 
@@ -37,7 +38,7 @@ const DayView = ({route, navigation}) => {
           navigation.navigate(Screens.PhotoView, {itemData: params});
         }}>
         <ImageBackground
-          source={{uri: `file://${itemData?.image}`}}
+          source={{uri: IMAGE_URI(itemData?.image)}}
           resizeMode="cover"
           style={styles.image}>
           <View>
