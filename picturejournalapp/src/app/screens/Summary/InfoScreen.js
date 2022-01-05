@@ -61,7 +61,7 @@ export default function InfoScreen() {
     <ScrollView style={styles.container}>
       <View style={styles.subContainer}>
         <Text style={styles.header}>Days</Text>
-        <Text style={styles.value}>{getRecordedDays()}/{totalDays}</Text>
+        {data && <Text style={styles.value}>{getRecordedDays()}/{totalDays}</Text>}
         <Text style={styles.info}>
           You have recorded {getRecordedDays()} days since the first day
         </Text>
@@ -71,16 +71,16 @@ export default function InfoScreen() {
 
       <View style={styles.subContainer}>
         <Text style={styles.header}>Hottest Day</Text>
-        <Text style={styles.value}>{hotest?.temperature}&deg;</Text>
-        <Text style={styles.info}>{getFormattedDate(hotest?.date)}</Text>
+        {data && <Text style={styles.value}>{hotest?.temperature}&deg;</Text>}
+        {data && <Text style={styles.info}>{getFormattedDate(hotest?.date)}</Text>}
       </View>
 
       <Divider style={styles.divider} width={2} />
 
       <View style={styles.subContainer}>
         <Text style={styles.header}>Coldest Day</Text>
-        <Text style={styles.value}>{coldest?.temperature}&deg;</Text>
-        <Text style={styles.info}>{getFormattedDate(coldest?.date)}</Text>
+        {data && <Text style={styles.value}>{coldest?.temperature}&deg;</Text>}
+        {data && <Text style={styles.info}>{getFormattedDate(coldest?.date)}</Text>}
       </View>
 
       <Divider style={styles.divider} width={2} />
@@ -100,7 +100,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     maxHeight: 140,
     backgroundColor: '#f8f8f8',
-    paddingTop: 20
+    paddingTop: 20,
+    minHeight: 120
   },
   divider: {
     backgroundColor: '#f8f8f8',
