@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import {BASE_URL, BASE_URL_LOCATION, BASE_WEATHER_URL} from '../../config';
+import {BASE_URL_LOCATION, BASE_WEATHER_URL} from '../../config';
 
 // Define action types
 export const SAVE_COORDINATES = 'SAVE_COORDINATES';
