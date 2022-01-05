@@ -52,7 +52,6 @@ function resourceReducer(state = initialState, action) {
     case REMOVE_IMAGE:
       console.log('REMOVE_IMAGE', action.payload);
       delete state.dataMap[action.payload];
-      state.thoughts = null;
       return {...state, dataMap: {...state.dataMap}};
 
     case GET_LOCATION:
